@@ -22,7 +22,6 @@ dotenv.config();
 const app = express()
 const PORT = process.env.PORT || 8000
 
-const __dirname = path.resolve();
 
 // middleware
 app.use(cors({
@@ -33,14 +32,16 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+const __dirname = path.resolve();
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "frontend/dist")));
 
   app.use((req, res) => {
-    res.sendFile(
-      path.resolve(__dirname, "frontend/dist/index.html")
-    );
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.resolve(__dirname, "frontend/dist/index.html"));
   });
 }
 
