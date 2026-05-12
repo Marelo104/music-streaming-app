@@ -14,15 +14,5 @@ const api = axios.create({
   }
 });
 
-// interceptor goes here
-api.interceptors.response.use(
-  (response) => response,  // if success just return response
-  (error) => {
-    if (error.response?.status === 401) {
-      // redirect to login
-    }
-    return Promise.reject(error);
-  }
-);
 
 export default api;

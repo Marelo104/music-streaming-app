@@ -8,11 +8,20 @@ export const generateTokenAndSendCookie = (userId, res) => {
     expiresIn: '30d',
   });
 
+  const isProduction = process.env.NODE_ENV === "production";
+  const clientUrl = process.env.CLIENT_URL;
+  const serverUrl = process.env.SERVER_URL;
+  const isCrossOriginDeployment =
+    isProduction &&
+    clientUrl &&
+    serverUrl &&
+    new URL(clientUrl).origin !== new URL(serverUrl).origin;
+
   res.cookie("authToken", token, {
     maxAge: 15 * 24 * 60 * 60 * 1000, // 30 days
     httpOnly: true,
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV !== 'development',
+    sameSite: isCrossOriginDeployment ? 'none' : 'lax',
+    secure: isProduction,
   });
 
 return token;
