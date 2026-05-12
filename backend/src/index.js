@@ -23,7 +23,12 @@ const PORT = process.env.PORT || 8000
 
 const __dirname = path.resolve();
 
-// middlewar
+// middleware
+app.use(cors({
+  origin: 'https://music-streaming-app-y8hs.onrender.com',
+  credentials: true
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
