@@ -5,13 +5,13 @@ dotenv.config()
 
 export const generateTokenAndSendCookie = (userId, res) => {
   const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-    expiresIn: '15d',
+    expiresIn: '30d',
   });
 
   res.cookie("authToken", token, {
     maxAge: 15 * 24 * 60 * 60 * 1000, // 30 days
     httpOnly: true,
-    sameSite: 'strict',
+    sameSite: 'none',
     secure: process.env.NODE_ENV !== 'development',
   });
 
