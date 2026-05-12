@@ -1,7 +1,6 @@
 import express from "express"
 import dotenv from "dotenv"
 import cookieParser from 'cookie-parser';
-import cors from "cors"
 import path from "path"
 
 import { connectDB } from "./lib/db.js"
@@ -24,11 +23,7 @@ const PORT = process.env.PORT || 8000
 
 const __dirname = path.resolve();
 
-// middleware
-app.use(cors({
-    origin: 'http://localhost:3000', // Explicitly allow your frontend
-    credentials: true                // Allow cookies/auth headers
-}));
+// middlewar
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
