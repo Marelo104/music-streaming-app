@@ -19,19 +19,16 @@ import likeRoutes from "./routes/like.routes.js"
 
 dotenv.config();
 
-
 const app = express()
 const PORT = process.env.PORT || 8000
-
-app.use(cors({
-  origin: 'onrender.com',
-  credentials: true
-}));
 
 const __dirname = path.resolve();
 
 // middleware
-
+app.use(cors({
+  origin: 'onrender.com',
+  credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -40,10 +37,12 @@ app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "frontend/dist")));
 
-  app.get('*all', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
+  app.use((req, res) => {
+    res.sendFile(
+      path.resolve(__dirname, "frontend/dist/index.html")
+    );
   });
-} 
+}
 
 // routes
 app.use("/api/auth", authRoutes)
