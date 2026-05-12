@@ -2,7 +2,6 @@ import express from "express"
 import dotenv from "dotenv"
 import cookieParser from 'cookie-parser';
 import path from "path"
-import cors from "cors"
 
 import { connectDB } from "./lib/db.js"
 
@@ -21,28 +20,13 @@ dotenv.config();
 
 const app = express()
 const PORT = process.env.PORT || 8000
-
+const __dirname = path.resolve();
 
 // middleware
-app.use(cors({
-  origin: process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : 'https://music-streaming-app-frontend.onrender.com',
-  credentials: true,
-}));
-
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
-const __dirname = path.resolve();
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "frontend/dist")));
-
-  app.use((req, res) => {
-    res.sendFile(
-      path.resolve(__dirname, "frontend/dist/index.html")
-    );
-  });
-}
 
 // routes
 app.use("/api/auth", authRoutes)
@@ -54,6 +38,17 @@ app.use("/api/stats", statRoutes)
 app.use("/api/search", searchRoutes)
 app.use("/api/recently-played", recentlyPlayedRoutes)
 app.use("/api/likes", likeRoutes)
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "frontend/dist")));
+
+  app.use((req, res) => {
+    res.sendFile(
+      path.resolve(__dirname, "frontend/dist/index.html")
+    );
+  });
+}
+
 
 app.listen(PORT, ()=>{
     console.log("Server is running on PORT " + PORT)
