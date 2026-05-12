@@ -18,12 +18,18 @@ import likeRoutes from "./routes/like.routes.js"
 
 dotenv.config();
 
+app.use(cors({
+  origin: 'https://music-streaming-app-y8hs.onrender.com',
+  credentials: true
+}));
+
 const app = express()
 const PORT = process.env.PORT || 8000
 
 const __dirname = path.resolve();
 
 // middleware
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -32,10 +38,8 @@ app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "frontend/dist")));
 
-  app.use((req, res) => {
-    res.sendFile(
-      path.resolve(__dirname, "frontend/dist/index.html")
-    );
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
   });
 }
 
