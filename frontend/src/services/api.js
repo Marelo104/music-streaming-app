@@ -7,6 +7,11 @@ const api = axios.create({
     ? 'http://localhost:5000/api'
     : '/api',
   withCredentials: true,
+    headers: {
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+  }
 });
 
 // interceptor goes here
