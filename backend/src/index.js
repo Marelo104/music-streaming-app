@@ -2,6 +2,7 @@ import express from "express"
 import dotenv from "dotenv"
 import cookieParser from 'cookie-parser';
 import path from "path"
+import cors from "cors"
 
 import { connectDB } from "./lib/db.js"
 
@@ -23,6 +24,11 @@ const PORT = process.env.PORT || 8000
 
 
 // middleware
+app.use(cors({
+  origin: process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://music-streaming-app-frontend.onrender.com',
+  credentials: true,
+}));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));

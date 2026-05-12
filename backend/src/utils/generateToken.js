@@ -11,7 +11,7 @@ export const generateTokenAndSendCookie = (userId, res) => {
   res.cookie("authToken", token, {
     maxAge: 15 * 24 * 60 * 60 * 1000, // 30 days
     httpOnly: true,
-    sameSite: 'none',
+    sameSite: 'strict',
     secure: process.env.NODE_ENV !== 'development',
   });
 
