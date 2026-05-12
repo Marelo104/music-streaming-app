@@ -18,13 +18,14 @@ import likeRoutes from "./routes/like.routes.js"
 
 dotenv.config();
 
-app.use(cors({
-  origin: 'https://music-streaming-app-y8hs.onrender.com',
-  credentials: true
-}));
 
 const app = express()
 const PORT = process.env.PORT || 8000
+
+app.use(cors({
+  origin: 'onrender.com',
+  credentials: true
+}));
 
 const __dirname = path.resolve();
 
