@@ -21,13 +21,11 @@ dotenv.config();
 
 const app = express()
 const PORT = process.env.PORT || 8000
-const isProduction = process.env.NODE_ENV === "production";
-const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
 
 
 // middleware
 app.use(cors({
-  origin: clientUrl,
+  origin: process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : 'https://music-streaming-app-frontend.onrender.com',
   credentials: true,
 }));
 
@@ -36,8 +34,14 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 const __dirname = path.resolve();
-if (isProduction) {
+if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "frontend/dist")));
+
+  app.use((req, res) => {
+    res.sendFile(
+      path.resolve(__dirname, "frontend/dist/index.html")
+    );
+  });
 }
 
 // routes
@@ -50,12 +54,6 @@ app.use("/api/stats", statRoutes)
 app.use("/api/search", searchRoutes)
 app.use("/api/recently-played", recentlyPlayedRoutes)
 app.use("/api/likes", likeRoutes)
-
-if (isProduction) {
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "frontend/dist/index.html"));
-  });
-}
 
 app.listen(PORT, ()=>{
     console.log("Server is running on PORT " + PORT)
